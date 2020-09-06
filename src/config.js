@@ -18,4 +18,5 @@ module.exports = {
   botToken,
   commandPrefix: process.env.COMMAND_PREFIX || '!tc',
   avatarCodeRegex: process.env.AVATAR_CODE_REGEX || /:mc-(\w*):/gm,
-}
+  tallcraftApiUri: process.env.TALLCRAFT_API_URI || 'https://api.tallcraft.com',
+};

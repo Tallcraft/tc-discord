@@ -1,40 +1,10 @@
 const Discord = require('discord.js');
-const fs = require('fs');
 
+const commands = require('./commands');
+const { getHelpCard } = require('./messages');
 const config = require('./config');
 
 let discordClient;
-
-// FIXME: Check if username is valid / avatar source has an avatar
-// TODO: publish to docker registry and use in tc-docker compose
-
-async function commandHandler(message) {
-  console.debug('cmd> ', message.content);
-  message.reply('Sorry I don\'t support commands yet, but I will in the future!');
-}
-
-function getAvatarURL(mcUsername) {
-  return `https://minotar.net/avatar/${mcUsername}/50`;
-}
-
-async function chatHandler(message) {
-  console.debug('msg> ', message.content);
-
-  const matches = message.content.matchAll(config.avatarCodeRegex);
-
-  if (!matches) {
-    return;
-  }
-
-  // Index 1 for a match is the first group matched.
-  const avatarURLs = Array.from(matches).map((match) => getAvatarURL(match[1]));
-
-  // We can't send all the avatar urls in one message. Discord only hides the image src url
-  // if we send them one by one.
-  avatarURLs.forEach((url) => {
-    message.channel.send(url);
-  });
-}
 
 async function onReady() {
   console.info(`Logged in as ${discordClient.user.tag}!`);
@@ -54,20 +24,31 @@ process.on('SIGINT', () => {
 (async () => {
   discordClient = new Discord.Client();
 
+  // Register commands
+  discordClient.commands = new Discord.Collection();
+  commands.forEach((cmd) => discordClient.commands.set(cmd.name, cmd));
+
   discordClient.on('error', (e) => console.error(e));
   discordClient.on('warn', (e) => console.warn(e));
   discordClient.on('ready', onReady);
   discordClient.on('message', (message) => {
-    if (message.author.bot || !message.guild) {
+    if (!message.content.startsWith(config.commandPrefix) || message.author.bot) return;
+
+    const args = message.content.slice(config.commandPrefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+
+    // If only base command is supplied print help.
+    if (!command.length || !discordClient.commands.has(command)) {
+      message.channel.send(getHelpCard(discordClient.commands));
       return;
     }
 
-    if (message.content.startsWith(config.commandPrefix)) {
-      commandHandler(message);
-      return;
+    try {
+      discordClient.commands.get(command).handler(message, args);
+    } catch (error) {
+      console.error(error);
+      message.reply('There was an error trying to execute that command!');
     }
-
-    chatHandler(message);
   });
 
   discordClient.login(config.botToken)

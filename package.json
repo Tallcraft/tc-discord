@@ -1,17 +1,22 @@
 {
   "name": "tc-discord",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tallcraft Discord Bot",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
   },
   "author": "Tallcraft",
   "license": "MIT",
   "dependencies": {
     "abort-controller": "^3.0.0",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-http": "^1.5.17",
     "discord.js": "^12.3.1",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.11.0",
+    "moment": "^2.27.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
