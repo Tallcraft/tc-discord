@@ -12,7 +12,7 @@ jobs:
       - name: package docker
         run: |
           docker login docker.pkg.github.com --username Tallcraft --password ${{ secrets.GITHUB_TOKEN }}
-          docker build . --file Dockerfile --tag docker.pkg.github.com/tallcraft/tc-discord/app:master
-          docker push docker.pkg.github.com/tallcraft/tc-discord/app:master
+          docker build . --file Dockerfile --tag docker.pkg.github.com/tallcraft/tc-discord/discordbot:master
+          docker push docker.pkg.github.com/tallcraft/tc-discord/discordbot:master
         env:
           CI: true
