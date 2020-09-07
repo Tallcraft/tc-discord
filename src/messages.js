@@ -30,6 +30,7 @@ function getAboutBotCard() {
   return new Discord.MessageEmbed()
     .setTitle('Tallcraft Discord Bot')
     .setDescription("Hi, I'm a Discord bot for Tallcraft. \n I can help you with various things.")
+    .setThumbnail('http://img.tallcraft.com/branding/logo144x.png')
     .addField('List Commands', '!tc help')
     .addField('Source Code', 'https://github.com/Tallcraft/tc-discord')
     .addField('Found a Bug? 🐞', 'File it here: https://github.com/Tallcraft/tc-discord/issues');
