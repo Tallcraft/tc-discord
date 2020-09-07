@@ -26,6 +26,30 @@ function getRelativeTimeLabel(timestampStr) {
   return moment(new Date(timestamp)).from(new Date());
 }
 
+function getPlayerListCard(servers) {
+  const msg = new Discord.MessageEmbed()
+    .setTitle('Tallcraft Network - Player List 🎮');
+
+  servers.forEach((server) => {
+    // Proxy does not expose player list as of now.
+    if (server.id === 'global') {
+      return;
+    }
+    const playerList = server.status.onlinePlayers;
+    let playerListStr = '';
+
+    if (!playerList?.length) {
+      playerListStr = ' -';
+    } else {
+      playerListStr = playerList.map((player) => player.name).join(', ');
+    }
+
+    msg.addField(server.name, `\`\`\`${playerListStr}\`\`\``);
+  });
+
+  return msg;
+}
+
 function getPlayerCard(player) {
   const msg = new Discord.MessageEmbed()
     .setTitle(player.lastSeenName)
@@ -106,5 +130,5 @@ function getHelpCard(commands) {
 }
 
 module.exports = {
-  getErrorCard, getPlayerCard, getAvatarURL, getSkinURL, getHelpCard,
+  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard,
 };

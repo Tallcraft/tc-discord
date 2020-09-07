@@ -89,4 +89,25 @@ module.exports = {
 
     return result.data.player;
   },
+
+  async getServerInfo() {
+    const result = await client.query({
+      query: gql`
+          query Servers {
+              mcServers {
+                  id
+                  name
+                  status {
+                      queryTime
+                      onlinePlayers {
+                          name
+                      }
+                  }
+              }
+          }
+      `,
+    });
+
+    return result?.data?.mcServers;
+  },
 };
