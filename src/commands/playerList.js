@@ -5,7 +5,7 @@ const api = require('../TCApiConnector');
 const cmd = new Command({
   name: 'list',
   description: 'Shows a list of online players.',
-  async handler(message, args) {
+  async handler(message) {
     const servers = await api.getServerInfo();
 
     if (!servers) {

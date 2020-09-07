@@ -139,5 +139,5 @@ function getHelpCard(commands) {
 }
 
 module.exports = {
-  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard, getAboutBotCard
+  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard, getAboutBotCard,
 };
