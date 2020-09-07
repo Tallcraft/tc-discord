@@ -102,6 +102,9 @@ module.exports = {
                       onlinePlayers {
                           name
                       }
+                      onlinePlayerCount
+                      maxPlayerCount
+                      isOnline
                   }
               }
           }

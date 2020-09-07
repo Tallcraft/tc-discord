@@ -42,7 +42,7 @@ function getPlayerListCard(servers) {
 
   servers.forEach((server) => {
     // Proxy does not expose player list as of now.
-    if (server.id === 'global') {
+    if (server.id === 'global' || !server.status.isOnline) {
       return;
     }
     const playerList = server.status.onlinePlayers;
@@ -54,7 +54,10 @@ function getPlayerListCard(servers) {
       playerListStr = playerList.map((player) => player.name).join(', ');
     }
 
-    msg.addField(server.name, `\`\`\`${playerListStr}\`\`\``);
+    const fieldTitle = `${server.name} \`[${server.status.onlinePlayerCount}/${server.status.maxPlayerCount}]\``;
+    const fieldBody = `\`\`\`${playerListStr}\`\`\``;
+
+    msg.addField(fieldTitle, fieldBody);
   });
 
   return msg;
