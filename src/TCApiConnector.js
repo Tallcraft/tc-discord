@@ -15,6 +15,11 @@ const client = new ApolloClient({
     fetch,
   }),
   cache: new InMemoryCache(),
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'network-only',
+    },
+  },
 });
 
 const playerQueryFields = `
