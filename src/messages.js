@@ -26,6 +26,15 @@ function getRelativeTimeLabel(timestampStr) {
   return moment(new Date(timestamp)).from(new Date());
 }
 
+function getAboutBotCard() {
+  return new Discord.MessageEmbed()
+    .setTitle('Tallcraft Discord Bot')
+    .setDescription("Hi, I'm a Discord bot for Tallcraft. \n I can help you with various things.")
+    .addField('List Commands', '!tc help')
+    .addField('Source Code', 'https://github.com/Tallcraft/tc-discord')
+    .addField('Found a Bug? 🐞', 'File it here: https://github.com/Tallcraft/tc-discord/issues');
+}
+
 function getPlayerListCard(servers) {
   const msg = new Discord.MessageEmbed()
     .setTitle('Tallcraft Network - Player List 🎮');
@@ -130,5 +139,5 @@ function getHelpCard(commands) {
 }
 
 module.exports = {
-  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard,
+  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard, getAboutBotCard
 };
