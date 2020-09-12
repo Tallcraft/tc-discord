@@ -117,6 +117,7 @@ module.exports = {
       query: gql`
           query Servers {
               mcServers {
+                  id
                   name
                   status {
                       queryTime
