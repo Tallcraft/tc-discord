@@ -36,11 +36,17 @@ function getAboutBotCard() {
     .addField('Found a Bug? 🐞', 'File it here: https://github.com/Tallcraft/tc-discord/issues');
 }
 
-function getConnectionInfoCard(servers) {
+function getConnectionInfoCard(servers, warnVersion) {
   const connectionTutorialURL = 'https://forum.tallcraft.com/t/how-to-connect-to-our-minecraft-server/30';
+
+  let description = `Here is a list of our servers and their connection addresses and Minecraft version required to play.\nA tutorial on how to connect:\n ${connectionTutorialURL}`;
+  if (warnVersion) {
+    description += '\n\n**Note:** The servers are currently not running on the latest MC version. Make sure to set your game to match the server version shown below.';
+  }
+
   const msg = new Discord.MessageEmbed()
     .setTitle('How to Connect 📶')
-    .setDescription(`Here is a list of our servers and their connection addresses and Minecraft version required to play.\nA tutorial on how to connect:\n ${connectionTutorialURL}`)
+    .setDescription(description)
     .setURL(connectionTutorialURL);
 
   servers.forEach((server) => {
