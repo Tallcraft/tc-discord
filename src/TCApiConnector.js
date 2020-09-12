@@ -95,6 +95,23 @@ module.exports = {
     return result.data.player;
   },
 
+  async getProxyVersion() {
+    const result = await client.query({
+      query: gql`
+          query Server($serverId: String) {
+              mcServer(serverId: $serverId) {
+                  version
+              }
+          }
+      `,
+      variables: {
+        serverId: config.tallcraftApiMCProxyId,
+      },
+    });
+
+    return result?.data?.mcServer?.version;
+  },
+
   async getServerInfo() {
     const result = await client.query({
       query: gql`
