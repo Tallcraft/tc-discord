@@ -36,6 +36,20 @@ function getAboutBotCard() {
     .addField('Found a Bug? 🐞', 'File it here: https://github.com/Tallcraft/tc-discord/issues');
 }
 
+function getConnectionInfoCard(servers) {
+  const connectionTutorialURL = 'https://forum.tallcraft.com/t/how-to-connect-to-our-minecraft-server/30';
+  const msg = new Discord.MessageEmbed()
+    .setTitle('How to Connect 📶')
+    .setDescription(`Here is a list of our servers and their connection addresses and Minecraft version required to play.\nA tutorial on how to connect:\n ${connectionTutorialURL}`)
+    .setURL(connectionTutorialURL);
+
+  servers.forEach((server) => {
+    msg.addField(`${server.name} \`v${server.version}\``, `\`${server.publicAddress}\``);
+  });
+
+  return msg;
+}
+
 function getPlayerListCard(servers) {
   const msg = new Discord.MessageEmbed()
     .setTitle('Tallcraft Network - Player List 🎮');
@@ -143,5 +157,10 @@ function getHelpCard(commands) {
 }
 
 module.exports = {
-  getErrorCard, getPlayerCard, getHelpCard, getPlayerListCard, getAboutBotCard,
+  getErrorCard,
+  getPlayerCard,
+  getHelpCard,
+  getPlayerListCard,
+  getAboutBotCard,
+  getConnectionInfoCard,
 };

@@ -100,7 +100,6 @@ module.exports = {
       query: gql`
           query Servers {
               mcServers {
-                  id
                   name
                   status {
                       queryTime
@@ -111,6 +110,22 @@ module.exports = {
                       maxPlayerCount
                       isOnline
                   }
+              }
+          }
+      `,
+    });
+
+    return result?.data?.mcServers;
+  },
+
+  async getServerConnectionInfo() {
+    const result = await client.query({
+      query: gql`
+          query Servers {
+              mcServers {
+                  name
+                  version
+                  publicAddress
               }
           }
       `,
