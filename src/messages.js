@@ -65,7 +65,7 @@ function getPlayerListCard(servers) {
 
 function getPlayerCard(player) {
   const msg = new Discord.MessageEmbed()
-    .setTitle(player.lastSeenName)
+    .setTitle(Discord.escapeMarkdown(player.lastSeenName))
     .setThumbnail(getAvatarURL(player.uuid))
     .setImage((getSkinURL(player.uuid)))
     .setTimestamp()
