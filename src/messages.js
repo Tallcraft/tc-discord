@@ -50,7 +50,7 @@ function getConnectionInfoCard(servers, warnVersion) {
     .setURL(connectionTutorialURL);
 
   servers.forEach((server) => {
-    msg.addField(`${server.name} \`v${server.version}\``, `\`${server.publicAddress}\``);
+    msg.addField(`${server.name} \`v${server.version}\``, `\`${server.address}\``);
   });
 
   return msg;

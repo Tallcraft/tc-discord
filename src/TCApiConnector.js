@@ -144,7 +144,7 @@ module.exports = {
                   id
                   name
                   version
-                  publicAddress
+                  address
               }
           }
       `,
