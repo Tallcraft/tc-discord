@@ -108,7 +108,7 @@ function getPlayerCard(player) {
   }
 
   if (player.groups) {
-    msg.addField('Ranks', player.groups.map((group) => group.id).join(', '));
+    msg.addField('Ranks', player.groups.map((group) => group.id).join(', ') || '-');
 
     // VIPs get a golden border highlight
     if (player.groups.some((group) => group.id === 'vip')) {
