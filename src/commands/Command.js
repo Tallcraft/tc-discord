@@ -11,6 +11,6 @@ module.exports = class Command {
   }
 
   printUsage(message) {
-    message.reply(getHelpCard(this));
+    return message.reply(getHelpCard(this));
   }
 };

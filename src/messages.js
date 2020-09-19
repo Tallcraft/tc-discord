@@ -8,12 +8,30 @@ function getErrorCard({ title = 'Error', message = 'An unknown error occured.' }
     .setDescription(message);
 }
 
-function getAvatarURL(identifier) {
-  return `https://minotar.net/avatar/${identifier}/50`;
-}
+const SKIN_TYPES = Object.freeze({
+  AVATAR: 'avatar',
+  HELM: 'helm',
+  CUBE: 'cube',
+  BODY: 'body',
+  BUST: 'bust',
+  SKIN: 'skin',
+});
 
-function getSkinURL(identifier) {
-  return `https://minotar.net/armor/body/${identifier}/100`;
+function getSkinURL(identifier, type = SKIN_TYPES.BODY) {
+  const scale = 100;
+
+  // Body and bust type supports showing armor, lets always do that.
+  let armorStr = '';
+  if (type === SKIN_TYPES.BODY || type === SKIN_TYPES.BUST) {
+    armorStr = '/armor/';
+  }
+
+  // All types except for skin support a scaling option, set a fixed scale.
+  let scaleStr = '';
+  if (type !== SKIN_TYPES.SKIN) {
+    scaleStr = `/${scale}`;
+  }
+  return `https://minotar.net/${armorStr}${type}/${identifier}${scaleStr}`;
 }
 
 function getRelativeTimeLabel(timestampStr) {
@@ -86,7 +104,7 @@ function getPlayerListCard(servers) {
 function getPlayerCard(player) {
   const msg = new Discord.MessageEmbed()
     .setTitle(Discord.escapeMarkdown(player.lastSeenName))
-    .setThumbnail(getAvatarURL(player.uuid))
+    .setThumbnail(getSkinURL(player.uuid, SKIN_TYPES.HELM))
     .setImage((getSkinURL(player.uuid)))
     .setTimestamp()
     .setFooter('Data from api.tallcraft.com.');
@@ -169,4 +187,6 @@ module.exports = {
   getPlayerListCard,
   getAboutBotCard,
   getConnectionInfoCard,
+  SKIN_TYPES,
+  getSkinURL,
 };
