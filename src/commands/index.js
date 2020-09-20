@@ -5,5 +5,6 @@ const about = require('./about');
 const connect = require('./connect');
 const areweupdated = require('./areweupdated');
 const skin = require('./skin');
+const rules = require('./rules');
 
-module.exports = [ping, playerLookup, playerList, about, connect, areweupdated, skin];
+module.exports = [ping, playerLookup, playerList, about, connect, areweupdated, skin, rules];
