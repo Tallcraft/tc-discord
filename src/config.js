@@ -17,7 +17,6 @@ if (!botToken) {
 module.exports = {
   botToken,
   commandPrefix: process.env.COMMAND_PREFIX || '!tc',
-  avatarCodeRegex: process.env.AVATAR_CODE_REGEX || /:mc-(\w*):/gm,
   tallcraftApiUri: process.env.TALLCRAFT_API_URI || 'https://api.tallcraft.com',
   tallcraftApiMCProxyId: process.env.TALLCRAFT_API_MC_PROXY_ID || 'global',
   mojangVersionManifestUri: process.env.MOJANG_VERSION_MANIFEST_URI || 'https://launchermeta.mojang.com/mc/game/version_manifest.json',
