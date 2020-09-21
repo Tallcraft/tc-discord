@@ -4,6 +4,10 @@ const config = require('./config');
 const errorInvalidVersionInfo = new Error('Received invalid version info from Mojang');
 
 module.exports = {
+  /**
+   * Query the Mojang API for the latest stable Minecraft version.
+   * @returns {Promise<String|null>} - Resolves with the version number or null on error.
+   */
   async getLatestStableMCVersion() {
     const response = await fetch(config.mojangVersionManifestUri);
     if (!response.ok) {

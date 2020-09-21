@@ -71,6 +71,11 @@ module.exports = {
     return data.result[0];
   },
 
+  /**
+   * Get player object from API.
+   * @param {String} identifier - Either a valid UUID or a playername.
+   * @returns {Promise<Object|null>} - Player object or null if not found.
+   */
   async getPlayerInfo(identifier) {
     if (isValidUUID(identifier)) {
       return this.getPlayerInfoByUUID(identifier);
@@ -78,6 +83,11 @@ module.exports = {
     return this.getPlayerInfoByName(identifier);
   },
 
+  /**
+   * Get player object from API by UUID.
+   * @param {String} uuid - MC user UUID.
+   * @returns {Promise<Object|null>} -Player object or null if not found.
+   */
   async getPlayerInfoByUUID(uuid) {
     const result = await client.query({
       query: gql`
@@ -95,6 +105,11 @@ module.exports = {
     return result.data.player;
   },
 
+  /**
+   * Get the version no. of the proxy Minecraft server which acts as the entry point for Minecraft
+   * clients.
+   * @returns {Promise<String|null>} Version number or null on error.
+   */
   async getProxyVersion() {
     const result = await client.query({
       query: gql`
@@ -112,6 +127,10 @@ module.exports = {
     return result?.data?.mcServer?.version;
   },
 
+  /**
+   * Get array of server info from API. See exported fields below.
+   * @returns {Promise<Array|null>} Array or null on error.
+   */
   async getServerInfo() {
     const result = await client.query({
       query: gql`
@@ -136,6 +155,10 @@ module.exports = {
     return result?.data?.mcServers;
   },
 
+  /**
+   * Get array of server info from API. See exported fields below.
+   * @returns {Promise<Array|null>} Array or null on error.
+   */
   async getServerConnectionInfo() {
     const result = await client.query({
       query: gql`

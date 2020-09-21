@@ -7,7 +7,11 @@ const config = require('./config');
 
 let discordClient;
 
-async function onReady() {
+/**
+ * Handler to be called once Discord client is connected and ready to receive and send messages.
+ * @returns {Promise<void>}
+ */
+function onReady() {
   console.info(`Logged in as ${discordClient.user.tag}!`);
 
   const appId = process.env.DISCORD_APP_ID;
@@ -18,6 +22,11 @@ async function onReady() {
   }
 }
 
+/**
+ * Handler for messages with command prefix.
+ * Parses arguments and calls matching command handler.
+ * @param {Message} message - Discord message.
+ */
 function commandHandler(message) {
   const args = message.content.slice(config.commandPrefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
@@ -36,6 +45,10 @@ function commandHandler(message) {
   }
 }
 
+/**
+ * Handler for all Messages which are not commands.
+ * @param {Message} message - Discord message.
+ */
 function messageHandler(message) {
   cannedResponses.handle(message);
 }

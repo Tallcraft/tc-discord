@@ -1,6 +1,12 @@
 const Discord = require('discord.js');
 const moment = require('moment');
 
+/**
+ * Creates Discord message card for error messages.
+ * @param {String} [title] - Title of error card.
+ * @param {String} [message] - Message body.
+ * @returns {module:"discord.js".MessageEmbed} - Discord embed message which bot can send.
+ */
 function getErrorCard({ title = 'Error', message = 'An unknown error occured.' } = {}) {
   return new Discord.MessageEmbed()
     .setColor('#af0000')
@@ -8,6 +14,11 @@ function getErrorCard({ title = 'Error', message = 'An unknown error occured.' }
     .setDescription(message);
 }
 
+/**
+ * Map of supported skin types exposed via Minotar MC Skin API.
+ * @type {Readonly<{CUBE: string, BUST: string, SKIN: string, AVATAR: string, BODY: string,
+ *                  HELM: string}>}
+ */
 const SKIN_TYPES = Object.freeze({
   AVATAR: 'avatar',
   HELM: 'helm',
@@ -17,6 +28,13 @@ const SKIN_TYPES = Object.freeze({
   SKIN: 'skin',
 });
 
+/**
+ * Get Minotar skin url.
+ * @param {String} identifier - Either MC username or UUID of user to get skin URL for.
+ * @param {SKIN_TYPES} [type] - Skin type to get URL for.
+ * @returns {String} - Skin URL to image matching MC user. If the identifier is invalid / not found
+ * the URL will point to the default Minecraft skin.
+ */
 function getSkinURL(identifier, type = SKIN_TYPES.BODY) {
   const scale = 100;
 
@@ -34,6 +52,11 @@ function getSkinURL(identifier, type = SKIN_TYPES.BODY) {
   return `https://minotar.net/${armorStr}${type}/${identifier}${scaleStr}`;
 }
 
+/**
+ * Converts a UNIX timestamp to a relative, natural language time label.
+ * @param {String} timestampStr - Unix timestamp as a string.
+ * @returns {string|null} Relative time label as a string or null if unable to parse.
+ */
 function getRelativeTimeLabel(timestampStr) {
   let timestamp;
   try {
@@ -44,6 +67,10 @@ function getRelativeTimeLabel(timestampStr) {
   return moment(new Date(timestamp)).from(new Date());
 }
 
+/**
+ * Get a Discord message card showing information about the bot.
+ * @returns {module:"discord.js".MessageEmbed} Discord embed message which bot can send.
+ */
 function getAboutBotCard() {
   return new Discord.MessageEmbed()
     .setTitle('Tallcraft Discord Bot')
@@ -54,6 +81,12 @@ function getAboutBotCard() {
     .addField('Found a Bug? 🐞', 'File it here: https://github.com/Tallcraft/tc-discord/issues');
 }
 
+/**
+ * Get a Discord message card showing the list of servers and their connection addresses.
+ * @param {Array} servers - Server data array as queried through the API.
+ * @param {boolean} warnVersion - Whether to warn the user that the server might be outdated.
+ * @returns {module:"discord.js".MessageEmbed} Discord embed message which bot can send.
+ */
 function getConnectionInfoCard(servers, warnVersion) {
   const connectionTutorialURL = 'https://forum.tallcraft.com/t/how-to-connect-to-our-minecraft-server/30';
 
@@ -74,6 +107,11 @@ function getConnectionInfoCard(servers, warnVersion) {
   return msg;
 }
 
+/**
+ * Get a Discord message card showing a list of servers with the names of online players.
+ * @param {Array} servers - Server dat array as queried through the API.
+ * @returns {module:"discord.js".MessageEmbed} Discord embed message which bot can send.
+ */
 function getPlayerListCard(servers) {
   const msg = new Discord.MessageEmbed()
     .setTitle('Tallcraft Network - Player List 🎮');
@@ -101,6 +139,11 @@ function getPlayerListCard(servers) {
   return msg;
 }
 
+/**
+ * Get a Discord message card showing a player profile.
+ * @param player - Player object as queried through the API.
+ * @returns {module:"discord.js".MessageEmbed} Discord embed message which bot can send.
+ */
 function getPlayerCard(player) {
   const msg = new Discord.MessageEmbed()
     .setTitle(Discord.escapeMarkdown(player.lastSeenName))
@@ -152,6 +195,11 @@ function getPlayerCard(player) {
   return msg;
 }
 
+/**
+ * Get a Discord message card showing a list of registered bot command and their usage+description.
+ * @param {Command[]}commands - Array of registered bot commands.
+ * @returns {module:"discord.js".MessageEmbed} Discord embed message which bot can send.
+ */
 function getHelpCard(commands) {
   const msg = new Discord.MessageEmbed();
 
