@@ -28,13 +28,8 @@ const responses = [
 
 module.exports = {
   async handle(message) {
-    for (let i = 0; i < responses.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      const handled = await responses[i].handle(message);
-      if (handled) {
-        return true;
-      }
-    }
-    return false;
+    const jobs = responses.map((response) => response.handle(message));
+    const results = await Promise.allSettled(jobs);
+    return results.some((result) => result.value);
   },
 };

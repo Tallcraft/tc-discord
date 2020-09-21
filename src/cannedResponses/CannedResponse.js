@@ -9,18 +9,21 @@ class CannedResponse {
     this.command = executeCommand;
   }
 
-  handle(message) {
+  async handle(message) {
     if (!this.triggerRegex.test(message.content)) {
       return false;
     }
 
     // We can handle this.
+    const promises = [];
     if (this.response) {
-      message.reply(this.response);
+      promises.push(message.reply(this.response));
     }
     if (this.command) {
-      this.command.handler(message);
+      promises.push(this.command.handler(message));
     }
+
+    await Promise.allSettled(promises);
     return true;
   }
 }
