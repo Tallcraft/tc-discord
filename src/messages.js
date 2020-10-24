@@ -228,6 +228,27 @@ function getHelpCard(commands) {
   return msg;
 }
 
+/**
+ * Get Discord message card showing the online status for a MC server.
+ * @param {Object} server - Server object with name and online status.
+ * @returns {module:"discord.js".MessageEmbed} - Discord embed message which bot can send.
+ */
+function getServerStatusCard(server) {
+  let statusEmoji;
+  let statusKeyword;
+
+  if (server.status.isOnline) {
+    statusEmoji = ':green_circle:';
+    statusKeyword = 'online';
+  } else {
+    statusEmoji = ':red_circle:';
+    statusKeyword = 'offline';
+  }
+  return new Discord.MessageEmbed()
+    .setTitle(`Server Status  ${statusEmoji}`)
+    .setDescription(`**${server.name}** just went **${statusKeyword}**.`);
+}
+
 module.exports = {
   getErrorCard,
   getPlayerCard,
@@ -237,4 +258,5 @@ module.exports = {
   getConnectionInfoCard,
   SKIN_TYPES,
   getSkinURL,
+  getServerStatusCard,
 };

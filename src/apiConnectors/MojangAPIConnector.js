@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const config = require('./config');
+const config = require('../config');
 
 const errorInvalidVersionInfo = new Error('Received invalid version info from Mojang');
 

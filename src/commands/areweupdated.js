@@ -1,13 +1,14 @@
 const Command = require('./Command');
-const api = require('../TCApiConnector');
-const mojangAPI = require('../MojangAPIConnector');
+const { MojangAPIConnector, TCApiConnector } = require('../apiConnectors');
 
 module.exports = new Command({
   name: 'areweupdated',
   description: 'Are we on the latest MC version yet?',
   async handler(message) {
-    const [proxyVersion, latestMCVersion] = await Promise.all([api.getProxyVersion(),
-      mojangAPI.getLatestStableMCVersion()]);
+    const [proxyVersion, latestMCVersion] = await Promise.all([
+      TCApiConnector.getProxyVersion(),
+      MojangAPIConnector.getLatestStableMCVersion(),
+    ]);
 
     let str;
     if (proxyVersion === latestMCVersion) {

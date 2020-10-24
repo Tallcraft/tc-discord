@@ -1,6 +1,6 @@
 const Command = require('./Command');
 const { getErrorCard, getPlayerCard } = require('../messages');
-const api = require('../TCApiConnector');
+const { TCApiConnector } = require('../apiConnectors');
 
 const cmd = new Command({
   name: 'lookup',
@@ -10,7 +10,7 @@ const cmd = new Command({
     if (!args.length) {
       cmd.printUsage(message);
     }
-    const player = await api.getPlayerInfo(args[0]);
+    const player = await TCApiConnector.getPlayerInfo(args[0]);
 
     if (!player) {
       return message.channel.send(getErrorCard({

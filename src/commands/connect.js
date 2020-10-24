@@ -1,7 +1,6 @@
 const Command = require('./Command');
 const { getConnectionInfoCard, getErrorCard } = require('../messages');
-const api = require('../TCApiConnector');
-const mojangAPI = require('../MojangAPIConnector');
+const { MojangAPIConnector, TCApiConnector } = require('../apiConnectors');
 
 module.exports = new Command({
   name: 'connect',
@@ -9,8 +8,10 @@ module.exports = new Command({
   async handler(message) {
     // The server query must succeed.
     // If the version query does not succeed, we just don't show a version warning.
-    const [servers, latestMCVersion] = await Promise.allSettled([api.getServerConnectionInfo(),
-      mojangAPI.getLatestStableMCVersion()]);
+    const [servers, latestMCVersion] = await Promise.allSettled([
+      TCApiConnector.getServerConnectionInfo(),
+      MojangAPIConnector.getLatestStableMCVersion(),
+    ]);
 
     if (servers.status !== 'fulfilled' || !servers.value) {
       return message.channel.send(getErrorCard({

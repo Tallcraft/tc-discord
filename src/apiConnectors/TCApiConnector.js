@@ -1,19 +1,47 @@
+const WebSocket = require('ws');
 const gql = require('graphql-tag');
-
 const fetch = require('node-fetch');
 const { createHttpLink } = require('apollo-link-http');
+const { WebSocketLink } = require('apollo-link-ws');
 const { InMemoryCache } = require('apollo-cache-inmemory');
-
+const { split } = require('apollo-link');
+const { getMainDefinition } = require('apollo-utilities');
 const ApolloClient = require('apollo-client').default;
 
-const config = require('./config');
-const { isValidUUID } = require('./util');
+const OnlineStatusObserver = require('./OnlineStatusObserver');
+const config = require('../config');
+const { isValidUUID } = require('../util');
+
+const httpLink = createHttpLink({
+  uri: config.tallcraftApiUri,
+  fetch,
+});
+
+// Create a WebSocket link used for subscriptions.
+const wsLink = new WebSocketLink({
+  uri: config.tallcraftApiUriWS,
+  options: {
+    reconnect: true,
+  },
+  webSocketImpl: WebSocket,
+});
+
+// For queries use HTTP, for subscriptions WS.
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition'
+      && definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+);
 
 const client = new ApolloClient({
-  link: createHttpLink({
-    uri: config.tallcraftApiUri,
-    fetch,
-  }),
+  link,
   cache: new InMemoryCache(),
   defaultOptions: {
     query: {
@@ -42,6 +70,8 @@ const playerQueryFields = `
         }
     }
 `;
+
+let onlineStatusObserver;
 
 module.exports = {
   async getPlayerInfoByName(name) {
@@ -174,5 +204,12 @@ module.exports = {
     });
 
     return result?.data?.mcServers;
+  },
+
+  get onlineStatusObserver() {
+    if (!onlineStatusObserver) {
+      onlineStatusObserver = new OnlineStatusObserver(client);
+    }
+    return onlineStatusObserver;
   },
 };
