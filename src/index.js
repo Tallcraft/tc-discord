@@ -33,12 +33,14 @@ function commandHandler(message) {
 
   // If only base command is supplied print help.
   if (!command.length || !discordClient.commands.has(command)) {
-    message.channel.send(getHelpCard(discordClient.commands));
+    const commandsWithPerm = discordClient.commands
+      .filter((cmd) => cmd.hasPermission(message.member));
+    message.channel.send(getHelpCard(commandsWithPerm));
     return;
   }
 
   try {
-    discordClient.commands.get(command).handler(message, args);
+    discordClient.commands.get(command).run(message, args);
   } catch (error) {
     console.error(error);
     message.reply('There was an error trying to execute that command!');
