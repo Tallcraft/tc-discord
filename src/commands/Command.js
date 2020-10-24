@@ -3,7 +3,7 @@ const { getHelpCard } = require('../messages');
 module.exports = class Command {
   /**
    * @callback commandHandler
-   * @param {Message} message - Discord message of the command sent by the user.
+   * @param {module:"discord.js".Message} message - Discord message of the command sent by the user.
    * @param {String[]} args - Arguments parsed from the message.
    */
 
@@ -30,7 +30,7 @@ module.exports = class Command {
 
   /**
    * React to user message with command usage string in a Discord MessageEmbed.
-   * @param {Message} message - Message to react to.
+   * @param {module:"discord.js".Message} message - Message to react to.
    * @returns {Promise} - Promise which resolves with the sent message.
    */
   printUsage(message) {
@@ -41,16 +41,8 @@ module.exports = class Command {
   }
 
   /**
-   * Command handler to be defined by command implementations.
-   */
-  // eslint-disable-next-line class-methods-use-this
-  async handler() {
-    throw new Error('Not implemented');
-  }
-
-  /**
    * Check whether a user has permission to run a command.
-   * @param {GuildMember} member - Discord guild member.
+   * @param {module:"discord.js".GuildMember} member - Discord guild member.
    * @returns {boolean} - True if user has permission, false otherwise.
    */
   hasPermission(member) {
@@ -62,14 +54,16 @@ module.exports = class Command {
 
   /**
    * Run the command. Will message user with error if they don't have permission.
-   * @param {GuildMessage} message - Message that triggered the command.
+   * @param {module:"discord.js".GuildMember} message - Message that triggered the command.
+   * @param {string[]} args - Command arguments derived from message content.
+   * Excluding command keyword.
    * @returns {Promise} - Resolves once the command has been handled.
    */
-  run(message) {
+  run(message, args) {
     if (!this.hasPermission(message.member)) {
       message.reply(this.noPermissionMessage);
       return undefined;
     }
-    return this.handler(message);
+    return this.handler(message, args);
   }
 };
