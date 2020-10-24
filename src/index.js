@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 
+const mcServerMonitor = require('./mcServerMonitor');
 const commands = require('./commands');
 const cannedResponses = require('./cannedResponses');
 const { getHelpCard } = require('./messages');
@@ -12,8 +13,9 @@ let discordClient;
  * @returns {Promise<void>}
  */
 function onReady() {
-  console.info(`Logged in as ${discordClient.user.tag}!`);
+  mcServerMonitor.init(discordClient);
 
+  console.info(`Logged in as ${discordClient.user.tag}!`);
   const appId = process.env.DISCORD_APP_ID;
   if (appId) {
     console.info(

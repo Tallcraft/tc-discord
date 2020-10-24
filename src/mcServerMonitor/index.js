@@ -5,7 +5,6 @@ const { getServerStatusCard } = require('../messages');
 class MCServerMonitor {
   init(discordClient) {
     this._client = discordClient;
-    this._servers = new Map();
     this._subscribedChannels = new Set();
   }
 
@@ -18,6 +17,10 @@ class MCServerMonitor {
   }
 
   subscribe(channelId) {
+    if (!this._client) {
+      throw new Error('Not initialized');
+    }
+
     const channel = this._getChannelById(channelId);
     this._subscribedChannels.add(channel);
 
@@ -25,16 +28,25 @@ class MCServerMonitor {
     if (this._subscribedChannels.size === 1) {
       TCApiConnector.onlineStatusObserver.on('update', this._onServerStatusUpdate.bind(this));
     }
+
+    return channel;
   }
 
   unsubscribe(channelId) {
+    if (!this._client) {
+      throw new Error('Not initialized');
+    }
+
     const channel = this._getChannelById(channelId);
     this._subscribedChannels.delete(channel);
 
     // Removed the last subscriber, remove the listener.
     if (!this._subscribedChannels.size) {
-      TCApiConnector.onlineStatusObserver.removeListener(this._onServerStatusUpdate.bind(this));
+      TCApiConnector.onlineStatusObserver
+        .removeListener('update', this._onServerStatusUpdate.bind(this));
     }
+
+    return channel;
   }
 
   _notifyChannels(server) {
@@ -48,11 +60,7 @@ class MCServerMonitor {
     if (!server) {
       throw new Error('Invalid server data from API');
     }
-    const oldServer = this._servers.get(server.id);
-    if (!oldServer || oldServer.status.isOnline !== server.status.isOnline) {
-      this._notifyChannels(server);
-    }
-    this._servers.set(server.id, server);
+    this._notifyChannels(server);
   }
 }
 
