@@ -246,7 +246,8 @@ function getServerStatusCard(server) {
   }
   return new Discord.MessageEmbed()
     .setTitle(`Server Status  ${statusEmoji}`)
-    .setDescription(`**${server.name}** just went **${statusKeyword}**.`);
+    .setDescription(`**${server.name}** just went **${statusKeyword}**.`)
+    .setTimestamp();
 }
 
 module.exports = {
