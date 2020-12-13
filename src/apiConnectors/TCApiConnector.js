@@ -198,6 +198,9 @@ module.exports = {
                   name
                   version
                   address
+                  status {
+                    isOnline
+                  }
               }
           }
       `,

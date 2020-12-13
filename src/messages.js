@@ -101,7 +101,9 @@ function getConnectionInfoCard(servers, warnVersion) {
     .setURL(connectionTutorialURL);
 
   servers.forEach((server) => {
-    msg.addField(`${server.name} \`v${server.version}\``, `\`${server.address}\``);
+    // Show a red circle if the server is offline.
+    const onlineIndicator = server.status?.isOnline ? '' : ' 🔴'
+    msg.addField(`${server.name} \`v${server.version}\`${onlineIndicator}`, `\`${server.address}\``);
   });
 
   return msg;
