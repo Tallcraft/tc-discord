@@ -4,6 +4,7 @@ const mcServerMonitor = require('./mcServerMonitor');
 const commands = require('./commands');
 const cannedResponses = require('./cannedResponses');
 const { getHelpCard } = require('./messages');
+const discordChannelMonitor = require('./discordChannelMonitor');
 const config = require('./config');
 
 let discordClient;
@@ -55,6 +56,7 @@ function commandHandler(message) {
  */
 function messageHandler(message) {
   cannedResponses.handle(message);
+  discordChannelMonitor.handle(message);
 }
 
 process.on('SIGINT', () => {
