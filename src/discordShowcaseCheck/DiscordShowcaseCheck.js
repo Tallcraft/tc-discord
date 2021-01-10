@@ -39,7 +39,14 @@ class DiscordShowcaseCheck {
     const promises = [];
     if (this.errorResponse) {
       if (this.DMUser) {
-        promises.push(message.author.send(this.errorResponse)
+        // Add orig message in response (only do if DMed message to prevent spam)
+        let DMResponse = `${this.errorResponse}\n\nYour original message:\n\`\`\`${message.content}`;
+        if (DMResponse.length > 1990) {
+          DMResponse = `${DMResponse.substring(0, 1990)}...`;
+        }
+        DMResponse += '\n```';
+
+        promises.push(message.author.send(DMResponse)
           .catch(() => message.reply(this.errorResponse)
             .then(
               (tempMessage) => tempMessage.delete({ timeout: 10000 }),
