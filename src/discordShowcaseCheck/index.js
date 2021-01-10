@@ -1,12 +1,17 @@
-const ChannelMonitor = require('./DiscordShowcaseCheck.js');
+const DiscordShowcaseCheck = require('./DiscordShowcaseCheck.js');
 const config = require('../config');
 
+/**
+ * Map of channel ID and appropriate channel filter - uses config to set up channel that only allows
+ * messages with attachments or start with http(s) urls.
+ * @type {Map<String,DiscordShowcaseCheck>}
+ */
 const showcaseChannels = new Map();
-showcaseChannels.set(config.discordShowcaseChannelId, new ChannelMonitor({
+showcaseChannels.set(config.discordShowcaseChannelId, new DiscordShowcaseCheck({
   bypassPermission: 'MANAGE_MESSAGES',
   allowIfAttachment: true,
   messageRegex: new RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,25}'),
-  errorResponse: `Invalid message. You may only send files or messages starting with http(s) links in <#${config.discordShowcaseChannelId}>.`,
+  invalidMessageResponse: `Invalid message. You may only send files or messages starting with http(s) links in <#${config.discordShowcaseChannelId}>.`,
   attemptDM: true,
 }));
 

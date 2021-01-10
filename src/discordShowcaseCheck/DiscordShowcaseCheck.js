@@ -3,16 +3,16 @@ class DiscordShowcaseCheck {
    * @param {String} bypassPermission - Permission to skip check.
    * @param {Boolean} allowIfAttachment - Allow message if attachments exist
    * @param {RegExp} messageRegex - Allow message if message validates against regex
-   * @param {String} errorResponse - If set, error response to send when invalid message.
-   * @param {Boolean} attemptDM - If errorResponse exists, attempt DMing user first.
+   * @param {String} invalidMessageResponse - If set, error response to send when invalid message.
+   * @param {Boolean} attemptDM - If invalidMessageResponse exists, attempt DMing user first.
    * Will fall back to temp message in channel.
    */
   constructor({ bypassPermission = 'ADMINISTRATOR', allowIfAttachment = false, messageRegex,
-    errorResponse, attemptDM = false }) {
+    invalidMessageResponse, attemptDM = false }) {
     this.bypassPermission = bypassPermission;
     this.allowIfAttachment = allowIfAttachment;
     this.messageRegex = messageRegex;
-    this.errorResponse = errorResponse;
+    this.invalidMessageResponse = invalidMessageResponse;
     this.DMUser = attemptDM;
   }
 
@@ -37,29 +37,30 @@ class DiscordShowcaseCheck {
 
     // If here, remove message
     const promises = [];
-    if (this.errorResponse) {
+    if (this.invalidMessageResponse) {
       if (this.DMUser) {
-        // Add orig message in response (only do if DMed message to prevent spam)
-        let DMResponse = `${this.errorResponse}\n\nYour original message:\n\`\`\`${message.content}`;
-        if (DMResponse.length > 1990) {
-          DMResponse = `${DMResponse.substring(0, 1990)}...`;
+        // Add original message in DM response
+        let invalidDMResponse = `${this.invalidMessageResponse}\n\nYour original message:\n\`\`\`${message.content}`;
+        // Truncates message to keep message under 2000 characters due to discord message limit
+        if (invalidDMResponse.length > 1990) {
+          invalidDMResponse = `${invalidDMResponse.substring(0, 1990)}...`;
         }
-        DMResponse += '\n```';
+        invalidDMResponse += '\n```';
 
-        promises.push(message.author.send(DMResponse)
-          .catch(() => message.reply(this.errorResponse)
+        promises.push(message.author.send(invalidDMResponse)
+          .catch(() => message.reply(this.invalidMessageResponse)
             .then(
               (tempMessage) => tempMessage.delete({ timeout: 10000 }),
-            ).catch((err) => console.log(err))));
+            ).catch((err) => console.error(err))));
       } else {
-        promises.push(message.reply(this.errorResponse)
+        promises.push(message.reply(this.invalidMessageResponse)
           .then(
             (tempMessage) => tempMessage.delete({ timeout: 10000 }),
-          ).catch((err) => console.log(err)));
+          ).catch((err) => console.error(err)));
       }
     }
 
-    promises.push(message.delete({ timeout: 0 }));
+    promises.push(message.delete());
     await Promise.allSettled(promises);
     return true;
   }
