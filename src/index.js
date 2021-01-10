@@ -4,7 +4,7 @@ const mcServerMonitor = require('./mcServerMonitor');
 const commands = require('./commands');
 const cannedResponses = require('./cannedResponses');
 const { getHelpCard } = require('./messages');
-const discordChannelMonitor = require('./discordChannelMonitor');
+const discordShowcaseCheck = require('./discordShowcaseCheck');
 const config = require('./config');
 
 let discordClient;
@@ -56,7 +56,6 @@ function commandHandler(message) {
  */
 function messageHandler(message) {
   cannedResponses.handle(message);
-  discordChannelMonitor.handle(message);
 }
 
 process.on('SIGINT', () => {
@@ -76,6 +75,11 @@ process.on('SIGINT', () => {
   discordClient.on('message', (message) => {
     // We don't check messages from ourselves or other bots.
     if (message.author.bot) {
+      return;
+    }
+    // If message in channel of showcase, stop execution and run showcase handler
+    if (discordShowcaseCheck.isShowcase(message.channel.id)) {
+      discordShowcaseCheck.handle(message);
       return;
     }
     if (message.content.startsWith(config.commandPrefix)) {
