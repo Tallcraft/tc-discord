@@ -23,7 +23,7 @@ class DiscordShowcaseCheck {
    */
   async handle(message) {
     // If author has permission, skip check
-    if (message.member.permissions.has(this.bypassPermission)) {
+    if (message.channel.permissionsFor(message.author).has(this.bypassPermission)) {
       return false;
     }
     // Check for attachments
@@ -48,6 +48,7 @@ class DiscordShowcaseCheck {
         invalidDMResponse += '\n```';
 
         promises.push(message.author.send(invalidDMResponse)
+          // Catch when DM fails to send and send regular temp message
           .catch(() => message.reply(this.invalidMessageResponse)
             .then(
               (tempMessage) => tempMessage.delete({ timeout: 10000 }),
