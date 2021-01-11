@@ -1,3 +1,6 @@
+/**
+ * Enables message filtering for showcase channel(s) for requirements like attachments or URLs
+ */
 const DiscordShowcaseCheck = require('./DiscordShowcaseCheck.js');
 const config = require('../config');
 
