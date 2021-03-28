@@ -2,10 +2,16 @@ const Discord = require('discord.js');
 
 const mcServerMonitor = require('./mcServerMonitor');
 const commands = require('./commands');
-const cannedResponses = require('./cannedResponses');
 const { getHelpCard } = require('./messages');
 const discordShowcaseCheck = require('./discordShowcaseCheck');
 const config = require('./config');
+
+let cannedResponses;
+
+if (config.cannedResponsesEnabled) {
+  // eslint-disable-next-line global-require
+  cannedResponses = require('./cannedResponses');
+}
 
 let discordClient;
 
@@ -55,7 +61,7 @@ function commandHandler(message) {
  * @param {Message} message - Discord message.
  */
 function messageHandler(message) {
-  cannedResponses.handle(message);
+  cannedResponses?.handle(message);
 }
 
 process.on('SIGINT', () => {

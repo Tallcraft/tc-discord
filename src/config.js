@@ -23,4 +23,5 @@ module.exports = {
   mojangVersionManifestUri: process.env.MOJANG_VERSION_MANIFEST_URI || 'https://launchermeta.mojang.com/mc/game/version_manifest.json',
   serverStatusChannelId: process.env.SERVER_STATUS_FEED_CHANNEL_ID,
   discordShowcaseChannelId: process.env.DISCORD_SHOWCASE_CHANNEL_ID,
+  cannedResponsesEnabled: process.env.CANNED_RESPONSES_ENABLED,
 };
