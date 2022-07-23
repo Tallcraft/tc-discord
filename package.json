@@ -21,8 +21,8 @@
     "graphql-tag": "^2.11.0",
     "moment": "^2.29.2",
     "node-fetch": "^2.6.7",
-    "sqlite": "^4.0.15",
-    "sqlite3": "^5.0.3",
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.0.10",
     "subscriptions-transport-ws": "^0.9.18",
     "ws": "^7.4.6"
   },
