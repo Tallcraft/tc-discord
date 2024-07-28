@@ -77,7 +77,7 @@ module.exports = {
   async getPlayerInfoByName(name) {
     const result = await client.query({
       query: gql`
-          query SearchPlayer($name: String!) {
+          query SearchPlayer($name: [String]) {
               players(searchPlayerName: $name) {
                   result {
                       ${playerQueryFields}
